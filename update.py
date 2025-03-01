@@ -39,6 +39,7 @@ if not client.heartbeat(): exit()
 collection = client.get_collection(collection_name)
 if not collection: exit()
 
+
 # Load the report
 report_path = f"{folder_path}report.json"
 df_report = f.get_s3_json(report_path, bucket)

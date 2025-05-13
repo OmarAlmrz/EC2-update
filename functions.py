@@ -34,3 +34,12 @@ def init_logger(logger_name:str,  level=logging.INFO):
     formatter = logging.Formatter('%(asctime)s - %(message)s')
     file_handler.setFormatter(formatter)
     return logger
+
+def delete_document(collection, value:str, key:str = "name"):
+    """
+    Delete document from collection or vector db.
+    The document is search and delete according to key:value metadata
+    """ 
+    collection.delete(
+        where={key: value}
+    )

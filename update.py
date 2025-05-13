@@ -21,14 +21,15 @@ s3 = boto3.resource(
 bucket = s3.Bucket(os.getenv('S3_EMBEDDINGS'))
 
 # Path to report 
-# /mnt/data/vectordb/SCJN/Tesis/ - [Juris,Aislada ]
-# /mnt/data/vectordb/SCJN/Precedentes/ - [Precedentes]
-# /mnt/data/vectordb/Federal/ - [Leyes]
+# /mnt/data/vectordb/SCJN/Tesis/ - Collection name[Juris,Aislada ]
+# /mnt/data/vectordb/SCJN/Precedentes/ -  Collection name[Precedentes]
+# /mnt/data/vectordb/Federal/ -  Collection name[Leyes]
+
 
 ## Change variables ##
-folder_path = "SCJN/Aislada/"
-database_path = "/mnt/data/vectordb/SCJN/Tesis/"
-collection_name = "Aislada"
+folder_path = "Federal/LF/"
+database_path = "/mnt/data/vectordb/SCJN/Precedentes/"
+collection_name = "Precedentes"
 #######################
 
 # Load database
@@ -48,20 +49,48 @@ if df_report.empty: exit()
 
 for _, row in df_report.iterrows():
     
-    # Path to the embeddings
-    embeddings_path = f"{folder_path}{row['file']}.gz"
+    
+    if not row['file'].endswith('.json'):
+        file_without_extension = row['file'].split('.')[0]
+        embeddings_path = f"{folder_path}{file_without_extension}.json.gz"
+    
+    else:
+        # Path to the embeddings
+        embeddings_path = f"{folder_path}{row['file']}.gz"
     
     # Load compressed data 
-    compressed_data = f.get_s3_gzip_json(embeddings_path, bucket) 
+    try:
+        compressed_data = f.get_s3_gzip_json(embeddings_path, bucket) 
     
-    collection.add( 
-        documents=compressed_data['documents'],
-        metadatas=compressed_data['metadata'],
-        embeddings=compressed_data['embeddings'],
-        ids=compressed_data['ids']
-    )
+    except Exception as e:
+        logger.error(f"Error loading {embeddings_path}: {e}")
+        continue
     
-    logger.info(f"Adding {row['file']} for {collection_name}")
+    action = row['action']
+    
+    if collection_name == "Leyes":
+        if action == "delete" or action == "update":
+            # Delete document from collection or vector db.
+            f.delete_document(collection, row['name'])
+            logger.info(f"Deleting {row['file']} from {collection_name}")
+            
+        if action == "add" or action == "update":
+            collection.add( 
+                documents=compressed_data['documents'],
+                metadatas=compressed_data['metadata'],
+                embeddings=compressed_data['embeddings'],
+                ids=compressed_data['ids']
+            )
+            logger.info(f"Adding {row['file']} for {collection_name}")
+    else:
+        collection.add( 
+            documents=compressed_data['documents'],
+            metadatas=compressed_data['metadata'],
+            embeddings=compressed_data['embeddings'],
+            ids=compressed_data['ids']
+        )
+    
+        logger.info(f"Adding {row['file']} for {collection_name}")
 
 logger.info(f"Collection {collection_name} updated. Total elements: {collection.count()}")
     

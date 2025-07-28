@@ -3,7 +3,7 @@ from updater import Updater
 
 class EstatalUpdater(Updater):
     def __init__(self):
-        super().__init__()
+        super().__init__(logger_name='estatal_updater')
         
     def update_collection(self, collection, df_report, collection_name, folder_path):
         for _, row in df_report.iterrows():
@@ -12,40 +12,19 @@ class EstatalUpdater(Updater):
                 # Delete document from collection or vector db.
                 self.delete_document(collection, row['name'])
                 self.logger.info(f"Deleting {row['file']} from {collection_name}")
-
+                
             if action == "add" or action == "update":
+                compressed_data = self.get_compress_data(folder_path=folder_path, file=row["file"])
+                exist = self.check_document_exist(collection, key="name", value=row["name"])
+                if exist: 
+                    self.logger.warning(f"Document {row['name']}  already exists in {collection_name} collection. Could not add it")
+                    continue
                 
-                if not row['file'].endswith('.json'):
-                    file_without_extension = row['file'].split('.')[0]
-                    embeddings_path = f"{folder_path}{file_without_extension}.json.gz"
-            
-                else: embeddings_path = f"{folder_path}{row['file']}.gz"
-                
-                # Load compressed data 
-                try:
-                    compressed_data = self.get_s3_gzip_json(embeddings_path) 
-                
-                except Exception as e:
-                    
-                    try:
-                        # Try loading the file without gzip
-                        compressed_data = self.get_s3_json(embeddings_path)
-                    except Exception as e:
-                        
-                        self.logger.error(f"Error loading {embeddings_path}: {e}")
-                        exit()
-                    
-                if action == "add":
-                    exist = self.check_document_exist(collection, key="name", value=row["name"])
-                    if exist: 
-                        self.logger.warning(f"Document {row['name']}  already exists in {collection_name} collection. Could not add it")
-                        continue
-                        
-                collection.add( 
-                    documents=compressed_data['documents'],
-                    metadatas=compressed_data['metadata'],
-                    embeddings=compressed_data['embeddings'],
-                    ids=compressed_data['ids']
+                # Add document to collection or vector db.
+                self.add_data_to_collection(
+                    row['name'],
+                    collection,
+                    compressed_data
                 )
                 self.logger.info(f"Adding {row['file']} for {collection_name}")
             else:

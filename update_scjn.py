@@ -3,27 +3,11 @@ from updater import Updater
 
 class SCJNUpdater(Updater):
     def __init__(self):
-        super().__init__()
+        super().__init__(logger_name='scjn_updater')
         
     def update_collection(self, collection, df_report, collection_name, folder_path):
         for _, row in df_report.iterrows():
-            if not row['file'].endswith('.json'):
-                file_without_extension = row['file'].split('.')[0]
-                embeddings_path = f"{folder_path}{file_without_extension}.json.json.gz"
-            
-            else:
-                # Path to the embeddings
-                embeddings_path = f"{folder_path}{row['file']}.json.gz"
-            
-            # Load compressed data 
-            try:
-                compressed_data = self.get_s3_gzip_json(embeddings_path) 
-            
-            except Exception as e:
-                self.logger.error(f"Error loading {embeddings_path}: {e}")
-                continue
-            
-            action = row['action']
+            compressed_data = self.get_compress_data(folder_path=folder_path, file=row["file"])
             
             collection.add( 
                 documents=compressed_data['documents'],

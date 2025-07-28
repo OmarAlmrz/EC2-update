@@ -12,8 +12,10 @@ import pandas as pd
 from dotenv import load_dotenv
 load_dotenv()
 
+
+BATCH_SIZE = 350
 class Updater(ABC):
-    def __init__(self):
+    def __init__(self, logger_name:str = 'updater'):
         # Initialize the S3 client
         self.s3 = boto3.resource(
                 service_name='s3',
@@ -24,7 +26,7 @@ class Updater(ABC):
         self.bucket = self.s3.Bucket(os.getenv('S3_EMBEDDINGS'))
         
         # Initialize the logger
-        self.logger = self.init_logger('update')
+        self.logger = self.init_logger(logger_name)
             
     @abstractmethod
     def update_collection(self, collection, df_report, collection_name, folder_path):
@@ -64,8 +66,7 @@ class Updater(ABC):
 
 
     def init_logger(self,logger_name:str,  level=logging.INFO):
-        log_file = f"{logger_name}.log"
-    
+        log_file = os.path.join("logs", f"{logger_name}.log")
     
         logger = logging.getLogger(logger_name)
         logger.setLevel(level)
@@ -177,9 +178,56 @@ class Updater(ABC):
         return sorted(list(folders))
 
 
+    def get_compress_data(self, folder_path:str, file:str):
+        if not file.endswith('.json'):
+            file_without_extension = file.split('.')[0]
+            embeddings_path = f"{folder_path}{file_without_extension}.json.gz"
+    
+        else: embeddings_path = f"{folder_path}{file}.gz"
+        
+        # Load compressed data 
+        try:
+            compressed_data = self.get_s3_gzip_json(embeddings_path) 
+            return compressed_data
+        
+        except Exception as e:
+            self.logger.error(f"Error loading {embeddings_path}: {e}")
+            exit()
 
 
-
+    def _batch_iterable(self, iterable, batch_size):
+        for i in range(0, len(iterable), batch_size):
+            yield iterable[i:i + batch_size]
+        
+    def add_data_to_collection(self, name, collection, compressed_data):
+        """
+        Add data to the collection.
+        """
+        
+        if len(compressed_data["ids"]) > 350:
+            print(f"Adding {name} to collection in batches.")
+            #Use batch startegy
+            
+            for text_batch, meta_batch, id_batch, embeddings_batch in zip(
+                self._batch_iterable(compressed_data['documents'], BATCH_SIZE),
+                self._batch_iterable(compressed_data['metadata'], BATCH_SIZE),
+                self._batch_iterable(compressed_data['ids'], BATCH_SIZE),
+                self._batch_iterable(compressed_data['embeddings'],BATCH_SIZE)
+            ):
+                
+                collection.add(
+                    documents=text_batch,
+                    metadatas=meta_batch,
+                    embeddings=embeddings_batch,
+                    ids=id_batch
+                )
+        else:  
+            collection.add( 
+                documents=compressed_data['documents'],
+                metadatas=compressed_data['metadata'],
+                embeddings=compressed_data['embeddings'],
+                ids=compressed_data['ids']
+            )
 
 
 

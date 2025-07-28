@@ -8,3 +8,10 @@
 logs/*
 
 myenv/*
+
+# Python #
+# Ignore all __pycache__ folders and .pyc files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd

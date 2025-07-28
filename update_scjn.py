@@ -9,11 +9,11 @@ class SCJNUpdater(Updater):
         for _, row in df_report.iterrows():
             if not row['file'].endswith('.json'):
                 file_without_extension = row['file'].split('.')[0]
-                embeddings_path = f"{folder_path}{file_without_extension}.json.gz"
+                embeddings_path = f"{folder_path}{file_without_extension}.json.json.gz"
             
             else:
                 # Path to the embeddings
-                embeddings_path = f"{folder_path}{row['file']}.gz"
+                embeddings_path = f"{folder_path}{row['file']}.json.gz"
             
             # Load compressed data 
             try:
@@ -46,7 +46,7 @@ if __name__ == "__main__":
             "folder_path": "SCJN/Juris/",
             "database_path": "/mnt/data/vectordb/SCJN/Tesis/",
             "collection_name": "Juris"
-        }
+        },
         {
             "folder_path": "SCJN/Aislada/",
             "database_path": "/mnt/data/vectordb/SCJN/Tesis/",

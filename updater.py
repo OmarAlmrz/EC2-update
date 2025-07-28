@@ -21,7 +21,7 @@ class Updater(ABC):
                 aws_secret_access_key= os.getenv('AWS_SECRET_ACCESS_KEY')	,
             )
 
-        self.bucket = s3.Bucket(os.getenv('S3_EMBEDDINGS'))
+        self.bucket = self.s3.Bucket(os.getenv('S3_EMBEDDINGS'))
         
         # Initialize the logger
         self.logger = self.init_logger('update')
@@ -62,6 +62,7 @@ class Updater(ABC):
         obj = self.bucket.Object(key).get()
         return json.loads(gzip.decompress(obj['Body'].read()).decode('utf-8'))
 
+
     def init_logger(self,logger_name:str,  level=logging.INFO):
         log_file = f"{logger_name}.log"
     
@@ -90,6 +91,12 @@ class Updater(ABC):
         collection.delete(
             where={key: value}
         )
+        removed = collection.get(
+            where={key: value}
+        )
+        ids = removed["ids"]
+        if len(ids) > 0:
+            self.logger.warning(f"Document {value} not deleted from {collection.name} collection. Still exists.")
 
 
     def delete_all_files_in_s3_folder(self, folder_prefix):
@@ -117,6 +124,18 @@ class Updater(ABC):
             print(f"Deleted {len(objects_to_delete[i:i+1000])} objects:", response)
 
     
+    def check_document_exist(self, collection, key:str, value:str):
+        """Check if document exists in collection according to key:value metadata"""
+        query = collection.get(where={key: value})
+        if query["metadatas"] == []:
+            return False
+        else:
+            for item in query["metadatas"]:
+                if item[key] == value:
+                    return True
+                
+        return True
+    
     def get_folders_from_s3_path(self, prefix=""):
         """
         Get all top-level folders from a specific S3 bucket path.
@@ -138,7 +157,7 @@ class Updater(ABC):
             paginator = self.bucket.meta.client.get_paginator('list_objects_v2')
             
             for page in paginator.paginate(
-                Bucket=bucket.name,
+                Bucket=self.bucket.name,
                 Prefix=prefix,
                 Delimiter='/'
             ):

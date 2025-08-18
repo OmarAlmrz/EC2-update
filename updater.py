@@ -98,32 +98,6 @@ class Updater(ABC):
         ids = removed["ids"]
         if len(ids) > 0:
             self.logger.warning(f"Document {value} not deleted from {collection.name} collection. Still exists.")
-
-
-    def delete_all_files_in_s3_folder(self, folder_prefix):
-        # Ensure folder_prefix ends with a slash
-        if not folder_prefix.endswith('/'):
-            folder_prefix += '/'
-        
-        # Collect all objects under the folder prefix
-        objects_to_delete = []
-        
-        for obj in self.bucket.objects.filter(Prefix=folder_prefix):
-            # Skip the folder object itself (which is just the prefix)
-            if obj.key != folder_prefix:
-                objects_to_delete.append({'Key': obj.key})
-        
-        if not objects_to_delete:
-            print(f"No files found in {folder_prefix}")
-            return
-
-        # Delete in batches of 1000 (S3 API limit)
-        for i in range(0, len(objects_to_delete), 1000):
-            response = self.bucket.delete_objects(
-                Delete={'Objects': objects_to_delete[i:i+1000]}
-            )
-            print(f"Deleted {len(objects_to_delete[i:i+1000])} objects:", response)
-
     
     def check_document_exist(self, collection, key:str, value:str):
         """Check if document exists in collection according to key:value metadata"""

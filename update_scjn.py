@@ -18,7 +18,6 @@ class SCJNUpdater(Updater):
 
             self.logger.info(f"Adding {row['file']} for {collection_name}")
         
-        self.delete_all_files_in_s3_folder(folder_path)
         self.logger.info(f"Collection {collection_name} updated. Total elements: {collection.count()}")
 
 

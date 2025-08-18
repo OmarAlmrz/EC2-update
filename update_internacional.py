@@ -1,13 +1,14 @@
-# Description: This script is used to update the embeddings of leyes estatales database.
+# Description: This script is used to update the embeddings of leyes federal database.
 from updater import Updater
 
-class EstatalUpdater(Updater):
+class InternacionalUpdater(Updater):
     def __init__(self):
-        super().__init__(logger_name='estatal_updater')
+        super().__init__( logger_name='internacional_updater')
         
     def update_collection(self, collection, df_report, collection_name, folder_path):
         for _, row in df_report.iterrows():
             action = row['action']
+     
             if action == "delete" or action == "update":
                 # Delete document from collection or vector db.
                 self.delete_document(collection, row['name'])
@@ -26,6 +27,7 @@ class EstatalUpdater(Updater):
                     collection,
                     compressed_data
                 )
+    
                 self.logger.info(f"Adding {row['file']} for {collection_name}")
             else:
                 self.logger.warning(f"Unknown action {action} for {row['file']} in {collection_name}")
@@ -38,13 +40,13 @@ if __name__ == "__main__":
     # Path to report
     databases = [
         {
-            "folder_path": "Estatal/",
-            "database_path": "/mnt/data/vectordb/Estatal/",
-            "collection_name": "Estatal"
+            "folder_path": "Internacional/",
+            "database_path": "/mnt/data/vectordb/Otros/",
+            "collection_name": "internacional"
         }
     ]
 
-    upd = EstatalUpdater()
+    upd = InternacionalUpdater()
 
     for db in databases:
         database_path = db['database_path']
@@ -54,19 +56,11 @@ if __name__ == "__main__":
         # Load collection    
         collection = upd.load_collection(database_path, collection_name)
 
-        # Exisnting folders (estados)
-        estados = upd.get_folders_from_s3_path(folder_path)
-        
-        for estado in estados:
-            folder_path_estado = f"{folder_path}{estado}/"
-            upd.logger.info(f"Updating {estado} collection")
-            
-            # Load the report
-            df_report = upd.load_report(folder_path_estado)
+        # Load the report
+        df_report = upd.load_report(folder_path)
 
-            # Update the collection with the report data
-            upd.update_collection(collection, df_report, collection_name, folder_path_estado)
-        
+        # Update the collection with the report data
+        upd.update_collection(collection, df_report, collection_name, folder_path)
                 
         
         

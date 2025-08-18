@@ -22,7 +22,7 @@ embedding_model = OpenAIEmbeddings(model="text-embedding-3-large", openai_api_ke
 client = chromadb.PersistentClient(v_directory)
 collection = client.get_collection("Estatal")
 
-df = get_s3_json(bondar_s3, "Estatal/estatal.json")
+df = get_s3_json(bondar_s3, "Estatal/estados.json")
 
 estados = df["estado"].unique().tolist()
 print(f"Estados: {estados}")

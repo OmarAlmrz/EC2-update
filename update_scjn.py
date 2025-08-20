@@ -7,8 +7,9 @@ class SCJNUpdater(Updater):
         
     def update_collection(self, collection, df_report, collection_name, folder_path):
         for _, row in df_report.iterrows():
-            compressed_data = self.get_compress_data(folder_path=folder_path, file=row["file"])
+            action = row["action"]
             if action == "add":
+                compressed_data = self.get_compress_data(folder_path=folder_path, file=row["file"])
                 exist = self.check_document_exist(collection, key="registro digital",value=row["registro digital"])
                 if exist: 
                     self.logger.info(f"Document {row['registro digital']} already exists in {collection_name} collection. Could not add it")
@@ -57,11 +58,16 @@ if __name__ == "__main__":
         # Load collection    
         collection = upd.load_collection(database_path, collection_name)
 
-        # Load the report
-        df_report = upd.load_report(folder_path)
-        
-        if df_report is None:
-            print(f"No report found for {collection_name} in {folder_path}")
+        try:
+            # Load the report
+            df_report = upd.load_report(folder_path)
+            
+            if df_report is None:
+                print(f"No report found for {collection_name} in {folder_path}")
+                continue
+            
+        except Exception as e:
+            print(f"Error loading report for {collection_name} in {folder_path}: {e}")
             continue
 
         # Update the collection with the report data

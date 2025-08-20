@@ -49,7 +49,7 @@ class Updater(ABC):
         # Load the report
         report_path = f"{folder_path}report.json"
         df_report = self.get_s3_json(report_path)
-        if df_report.empty: exit()
+        if df_report.empty: return None
         return df_report
 
     

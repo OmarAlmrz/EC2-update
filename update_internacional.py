@@ -29,8 +29,7 @@ class InternacionalUpdater(Updater):
                 )
     
                 self.logger.info(f"Adding {row['file']} for {collection_name}")
-            else:
-                self.logger.warning(f"Unknown action {action} for {row['file']} in {collection_name}")
+          ssssssss
         
         self.logger.info(f"Collection {collection_name} updated. Total elements: {collection.count()}")
 

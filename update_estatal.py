@@ -38,8 +38,8 @@ if __name__ == "__main__":
     databases = [
         {
             "folder_path": "Estatal/",
-            "database_path": "/mnt/data/vectordb/Estatal/",
-            "collection_name": "Estatal"
+            "database_path": "/mnt/data/vectordb/",
+            "collection_name": "estatal"
         }
     ]
 

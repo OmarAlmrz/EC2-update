@@ -29,7 +29,7 @@ class InternacionalUpdater(Updater):
                 )
     
                 self.logger.info(f"Adding {row['file']} for {collection_name}")
-          ssssssss
+ 
         
         self.logger.info(f"Collection {collection_name} updated. Total elements: {collection.count()}")
 
@@ -40,7 +40,7 @@ if __name__ == "__main__":
     databases = [
         {
             "folder_path": "Internacional/",
-            "database_path": "/mnt/data/vectordb/Otros/",
+            "database_path": "/mnt/data/vectordb/",
             "collection_name": "internacional"
         }
     ]

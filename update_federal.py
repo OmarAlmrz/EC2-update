@@ -39,8 +39,8 @@ if __name__ == "__main__":
     databases = [
         {
             "folder_path": "Federal/LF/",
-            "database_path": "/mnt/data/vectordb/Federal/",
-            "collection_name": "Leyes"
+            "database_path": "/mnt/data/vectordb/",
+            "collection_name": "leyes"
         }
     ]
 

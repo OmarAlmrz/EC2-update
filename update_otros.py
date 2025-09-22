@@ -41,7 +41,7 @@ if __name__ == "__main__":
     databases = [
         {
             "folder_path": "Otros/",
-            "database_path": "/mnt/data/vectordb/Otros/",
+            "database_path": "/mnt/data/vectordb/",
             "collection_name": "otros"
         }
     ]

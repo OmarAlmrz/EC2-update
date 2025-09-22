@@ -33,18 +33,18 @@ if __name__ == "__main__":
     databases = [
         {
             "folder_path": "SCJN/Juris/",
-            "database_path": "/mnt/data/vectordb/SCJN/Tesis/",
+            "database_path": "/mnt/data/vectordb/",
             "collection_name": "Juris"
         },
         {
             "folder_path": "SCJN/Aislada/",
-            "database_path": "/mnt/data/vectordb/SCJN/Tesis/",
+            "database_path": "/mnt/data/vectordb/",
             "collection_name": "Aislada"
         },
         {
             "folder_path": "SCJN/Precedentes/",
-            "database_path": "/mnt/data/vectordb/SCJN/Precedentes/",
-            "collection_name": "Precedentes"
+            "database_path": "/mnt/data/vectordb/",
+            "collection_name": "precedentes"
         },
     ]
     

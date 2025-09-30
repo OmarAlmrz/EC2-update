@@ -166,7 +166,7 @@ class Updater(ABC):
         
         except Exception as e:
             self.logger.error(f"Error loading {embeddings_path}: {e}")
-            exit()
+            raise e
 
 
     def _batch_iterable(self, iterable, batch_size):

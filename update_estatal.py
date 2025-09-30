@@ -14,10 +14,15 @@ class EstatalUpdater(Updater):
                 self.logger.info(f"Deleting {row['file']} from {collection_name}")
                 
             if action == "add" or action == "update":
-                compressed_data = self.get_compress_data(folder_path=folder_path, file=row["file"])
+                try:
+                    # Get compressed data
+                    compressed_data = self.get_compress_data(folder_path=folder_path, file=row["file"])
+                except Exception as e:
+                    self.logger.error(f"Error loading {folder_path}{row['file']}: {e}")
+                    continue
+
                 exist = self.check_document_exist(collection, key="name", value=row["name"])
                 if exist: 
-                    self.logger.warning(f"Document {row['name']}  already exists in {collection_name} collection. Could not add it")
                     continue
                 
                 # Add document to collection or vector db.

@@ -19,36 +19,36 @@ COLLECTIONS_CONFIG = [
         "collection": "estatal",
         "metadata_path": "Estatal/estados.json"
     },
-    {
-        "path": "/mnt/data/vectordb/",
-        "collection": "leyes",
-        "metadata_path": "Federal/LF/procesamiento.json"
-    },
-    {
-        "path": "/mnt/data/vectordb/",
-        "collection": "internacional",
-        "metadata_path": "Internacional/procesamiento.json"
-    },
-    {
-        "path": "/mnt/data/vectordb/",
-        "collection": "otros",
-        "metadata_path": "Otros/procesamiento.json"
-    },
-    {
-        "path": "/mnt/data/vectordb/",
-        "collection": "Aislada",
-        "metadata_path": "SCJN/Aislada/metadata.json"
-    },
-    {
-        "path": "/mnt/data/vectordb/",
-        "collection": "Juris",
-        "metadata_path": "SCJN/Juris/metadata.json"
-    },
-    {
-        "path": "/mnt/data/vectordb/",
-        "collection": "precedentes",
-        "metadata_path": "SCJN/Precedentes/metadata.json"
-    }
+    # {
+    #     "path": "/mnt/data/vectordb/",
+    #     "collection": "leyes",
+    #     "metadata_path": "Federal/LF/procesamiento.json"
+    # },
+    # {
+    #     "path": "/mnt/data/vectordb/",
+    #     "collection": "internacional",
+    #     "metadata_path": "Internacional/procesamiento.json"
+    # },
+    # {
+    #     "path": "/mnt/data/vectordb/",
+    #     "collection": "otros",
+    #     "metadata_path": "Otros/procesamiento.json"
+    # },
+    # {
+    #     "path": "/mnt/data/vectordb/",
+    #     "collection": "Aislada",
+    #     "metadata_path": "SCJN/Aislada/metadata.json"
+    # },
+    # {
+    #     "path": "/mnt/data/vectordb/",
+    #     "collection": "Juris",
+    #     "metadata_path": "SCJN/Juris/metadata.json"
+    # },
+    # {
+    #     "path": "/mnt/data/vectordb/",
+    #     "collection": "precedentes",
+    #     "metadata_path": "SCJN/Precedentes/metadata.json"
+    # }
     
 ]
 

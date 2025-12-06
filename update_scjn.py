@@ -42,7 +42,7 @@ if __name__ == "__main__":
             "collection_name": "Aislada"
         },
         {
-            "folder_path": "SCJN/Precedentes/",
+            "folder_path": "SCJN/precedentes/",
             "database_path": "/mnt/data/vectordb/",
             "collection_name": "precedentes"
         },

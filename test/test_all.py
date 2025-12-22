@@ -65,7 +65,7 @@ if __name__ == "__main__":
         collection = client.get_collection(name=config["collection"])
 
         print(f"Total items in collection: {collection.count()}")
-        if config['collection'] == "Aislada" or config['collection'] == "Juris" or config['collection'] == "precedentes":
+        if config['collection'] == "aislada" or config['collection'] == "juris" or config['collection'] == "precedentes":
             if metadata_df.shape[0] != collection.count():
                 print(f"❌ Mismatch in counts for collection '{config['collection']}': Metadata has {metadata_df.shape[0]}, Collection has {collection.count()}")
                 continue

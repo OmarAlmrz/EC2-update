@@ -34,12 +34,12 @@ if __name__ == "__main__":
         {
             "folder_path": "SCJN/Juris/",
             "database_path": "/mnt/data/vectordb/",
-            "collection_name": "Juris"
+            "collection_name": "juris"
         },
         {
             "folder_path": "SCJN/Aislada/",
             "database_path": "/mnt/data/vectordb/",
-            "collection_name": "Aislada"
+            "collection_name": "aislada"
         },
         {
             "folder_path": "SCJN/precedentes/",

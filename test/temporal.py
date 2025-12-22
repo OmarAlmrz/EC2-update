@@ -2,7 +2,7 @@ import chromadb
 import os
 
 client = chromadb.PersistentClient("/mnt/data/vectordb/")
-collection = client.get_collection("Juris")
+collection = client.get_collection("Aislada")
 
 data = collection.get(where={"epoca": 12})
 print(f"Total items retrieved: {len(data['ids'])}")

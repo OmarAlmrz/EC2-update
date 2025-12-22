@@ -36,18 +36,13 @@ COLLECTIONS_CONFIG = [
     },
     {
         "path": "/mnt/data/vectordb/",
-        "collection": "Aislada",
+        "collection": "aislada",
         "metadata_path": "SCJN/Aislada/metadata.json"
     },
     {
         "path": "/mnt/data/vectordb/",
-        "collection": "Juris",
+        "collection": "juris",
         "metadata_path": "SCJN/Juris/metadata.json"
-    },
-    {
-        "path": "/mnt/data/vectordb/",
-        "collection": "precedentes",
-        "metadata_path": "SCJN/Precedentes/metadata.json"
     }
     
 ]

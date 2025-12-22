@@ -38,7 +38,7 @@ class Updater(ABC):
         if not client.heartbeat(): exit()
 
         # Load the collection
-        collection = client.get_collection(collection_name)
+        collection = client.get_or_create_collection(collection_name)
         if not collection: exit()
         
         self.logger.info(f"Loading collection {collection_name}")

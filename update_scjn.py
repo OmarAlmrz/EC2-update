@@ -15,6 +15,16 @@ class SCJNUpdater(Updater):
                     self.logger.info(f"Document {row['registro digital']} already exists in {collection_name} collection. Could not add it")
                     continue
                 
+                # Check if embeddings list exists and is not empty
+                if not compressed_data.get("embeddings") or len(compressed_data["embeddings"]) == 0:
+                    self.logger.warning(f"Skipping {row['registro digital']}: embeddings list is empty.")
+                    continue
+                
+                # Check if any individual embedding is empty
+                if any(not embedding or len(embedding) == 0 for embedding in compressed_data["embeddings"]):
+                    self.logger.warning(f"Skipping {row['registro digital']}: one or more embeddings are empty.")
+                    continue
+            
                 collection.add( 
                     documents=compressed_data['documents'],
                     metadatas=compressed_data['metadata'],

@@ -178,7 +178,17 @@ class Updater(ABC):
         Add data to the collection.
         """
         
-        if len(compressed_data["ids"]) > 350:
+        # Check if embeddings list exists and is not empty
+        if not compressed_data.get("embeddings") or len(compressed_data["embeddings"]) == 0:
+            self.logger.warning(f"Skipping {name}: embeddings list is empty.")
+            return
+        
+        # Check if any individual embedding is empty
+        if any(not embedding or len(embedding) == 0 for embedding in compressed_data["embeddings"]):
+            self.logger.warning(f"Skipping {name}: one or more embeddings are empty.")
+            return
+    
+        if len(compressed_data["ids"]) > BATCH_SIZE:
             print(f"Adding {name} to collection in batches.")
             #Use batch startegy
             

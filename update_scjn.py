@@ -42,12 +42,12 @@ if __name__ == "__main__":
     # Path to report
     databases = [
         {
-            "folder_path": "SCJN/Juris/",
+            "folder_path": "SCJN/juris/",
             "database_path": "/mnt/data/vectordb/",
             "collection_name": "juris"
         },
         {
-            "folder_path": "SCJN/Aislada/",
+            "folder_path": "SCJN/aislada/",
             "database_path": "/mnt/data/vectordb/",
             "collection_name": "aislada"
         },

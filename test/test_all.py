@@ -15,32 +15,26 @@ bondar_s3 = s3.Bucket(os.getenv('S3_NAME'))
 
 COLLECTIONS_CONFIG = [
     {
-        "path": "/mnt/data/vectordb/",
         "collection": "estatal",
         "metadata_path": "Estatal/estados.json"
     },
     {
-        "path": "/mnt/data/vectordb/",
         "collection": "leyes",
         "metadata_path": "Federal/LF/procesamiento.json"
     },
     {
-        "path": "/mnt/data/vectordb/",
         "collection": "internacional",
         "metadata_path": "Internacional/procesamiento.json"
     },
     {
-        "path": "/mnt/data/vectordb/",
         "collection": "otros",
         "metadata_path": "Otros/procesamiento.json"
     },
     {
-        "path": "/mnt/data/vectordb/",
         "collection": "aislada",
         "metadata_path": "SCJN/Aislada/metadata.json"
     },
     {
-        "path": "/mnt/data/vectordb/",
         "collection": "juris",
         "metadata_path": "SCJN/Juris/metadata.json"
     }
@@ -51,6 +45,7 @@ if __name__ == "__main__":
     embedding_model = OpenAIEmbeddings(model="text-embedding-3-large", openai_api_key=os.getenv('OPENAI_API_KEY'))
     query = "que dice el primer artículo de la ley"
     query_embedding = embedding_model.embed_query(query)
+    client = chromadb.HttpClient()
     
     for config in COLLECTIONS_CONFIG:
         print(f"Processing collection: {config['collection']}")
@@ -61,7 +56,7 @@ if __name__ == "__main__":
             continue
         
         # Initialize ChromaDB client and collection
-        client = chromadb.PersistentClient(config["path"])
+        
         collection = client.get_collection(name=config["collection"])
 
         print(f"Total items in collection: {collection.count()}")

@@ -43,7 +43,6 @@ if __name__ == "__main__":
     databases = [
         {
             "folder_path": "Estatal/",
-            "database_path": "/mnt/data/vectordb/",
             "collection_name": "estatal"
         }
     ]
@@ -51,12 +50,11 @@ if __name__ == "__main__":
     upd = EstatalUpdater()
 
     for db in databases:
-        database_path = db['database_path']
         folder_path = db['folder_path']
         collection_name = db['collection_name']
         
         # Load collection    
-        collection = upd.load_collection(database_path, collection_name)
+        collection = upd.load_collection(collection_name)
 
         # Exisnting folders (estados)
         estados = upd.get_folders_from_s3_path(folder_path)

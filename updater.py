@@ -27,18 +27,21 @@ class Updater(ABC):
         
         # Initialize the logger
         self.logger = self.init_logger(logger_name)
-            
+        
+        self.client = None
+        
     @abstractmethod
     def update_collection(self, collection, df_report, collection_name, folder_path):
         pass
     
-    def load_collection(self, database_path, collection_name):
+    def load_collection(self, collection_name):
         # Load database
-        client = chromadb.PersistentClient(path=database_path)
-        if not client.heartbeat(): exit()
+        if not self.client:
+            self.client = chromadb.HttpClient()
+        if not self.client.heartbeat(): exit()
 
         # Load the collection
-        collection = client.get_or_create_collection(collection_name)
+        collection = self.client.get_collection(collection_name)
         if not collection: exit()
         
         self.logger.info(f"Loading collection {collection_name}")

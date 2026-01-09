@@ -43,17 +43,14 @@ if __name__ == "__main__":
     databases = [
         {
             "folder_path": "SCJN/juris/",
-            "database_path": "/mnt/data/vectordb/",
             "collection_name": "juris"
         },
         {
             "folder_path": "SCJN/aislada/",
-            "database_path": "/mnt/data/vectordb/",
             "collection_name": "aislada"
         },
         {
             "folder_path": "SCJN/precedentes/",
-            "database_path": "/mnt/data/vectordb/",
             "collection_name": "precedentes"
         },
     ]
@@ -66,7 +63,7 @@ if __name__ == "__main__":
         collection_name = db['collection_name']
         
         # Load collection    
-        collection = upd.load_collection(database_path, collection_name)
+        collection = upd.load_collection(collection_name)
 
         try:
             # Load the report

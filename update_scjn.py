@@ -58,7 +58,6 @@ if __name__ == "__main__":
     upd = SCJNUpdater()
 
     for db in databases:
-        database_path = db['database_path']
         folder_path = db['folder_path']
         collection_name = db['collection_name']
         

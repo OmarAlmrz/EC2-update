@@ -86,9 +86,9 @@ if __name__ == "__main__":
     bucket = s3.Bucket(os.getenv('S3_EMBEDDINGS'))
     
     paths = [
-        "SCJN/Juris/",
-        "SCJN/Aislada/",
-        "SCJN/Precedentes/",
+        "SCJN/juris/",
+        "SCJN/aislada/",
+        "SCJN/precedentes/",
         "Federal/LF/",
         "Internacional/",
         "Otros/",
